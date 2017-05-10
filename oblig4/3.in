@@ -1,0 +1,36 @@
+# Pasienter (id, navn, fodselsnummer, adresse, postnr)
+0, Kristian Gregorius Hustad, 09119501010, Vestkanten 4, 0700
+1, Mathias Stang, 30029001234, Osloveien 29, 0100
+2, Arne Maus, 01024898765, Tangoddneset 24, 1450
+3, Bjarte Paul Tjøstheim, 11111143521, Veigata 9, 0123
+
+# Legemidler (ID, navn, type, pris, virkestoff [, styrke])
+0, Ventoline, c, 63.60, 20.0
+1, Arcoxia, c, 250.30, 30.0
+2, Paralgin Forte, b, 77.20, 400.0, 30
+3, Morfin, a, 254.60, 100.0, 70
+4, Valium, b, 87.10, 125.0, 65
+5, Aerius, c, 144.30, 500.0
+6, Ventoline, c, 63.60, 20.0
+
+# Leger (navn, avtalenr / 0 hvis ingen avtale)
+Dr. Dyregod, 33
+Dr. Løvold, 0
+Dr. Meppel, 0
+Dr. Oetker, 69
+Dr. Rolfsen, 25675
+Dr. Rosvold, 435
+Dr. Ueland, 3857
+
+# Resepter (id, hvit/blaa, pasientID, legenavn, legemiddelID, reit)
+0, blaa, 0, Dr. Rolfsen, 3, 200
+1, hvit, 2, Dr. Løvold, 1, 4
+2, blaa, 0, Dr. Rolfsen, 4, 699
+3, hvit, 1, Dr. Løvold, 5, 2
+4, hvit, 0, Dr. Rosvold, 5, 2
+5, blaa, 0, Dr. Rosvold, 0, 10
+6, blaa, 1, Dr. Løvold, 2, 0
+7, blaa, 0, Dr. Oetker, 2, 3
+8, blaa, 2, Dr. Dyregod, 3, 1
+
+# Slutt
