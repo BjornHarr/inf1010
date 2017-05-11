@@ -23,13 +23,11 @@ class Oblig5 {
         }
         l.settMinimalUtskrift();
 
-
         // les start-koordinater fra standard input
         Scanner inn = new Scanner(System.in);
         boolean kunForste = false;
         boolean minUt = true;
 
-        System.out.println("did Github work?");
         System.out.println(String.format("minimalUtskrift('u') = %b | SkrivKunForste('f') = %b | 'p' for aa printe labyrint", minUt, kunForste));
         while (inn.hasNextLine()) {
             String[] ord = inn.nextLine().split(" ");
