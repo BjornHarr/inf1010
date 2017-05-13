@@ -84,7 +84,7 @@ public abstract class Rute {
     }
 
     private void lagreUtvei(String vei, int lengde){
-        utveier.settInn(new Utvei(this, lengde, vei + "Aapning funnet", labyrintReferanse.toString(), minimalUtskrift));
+        utveier.settInn(new Utvei(this, lengde, vei + "Aapning funnet", labyrintReferanse.toString(), minimalUtskrift, labyrintReferanse));
     }
 
     public String hentKoordinat(){
