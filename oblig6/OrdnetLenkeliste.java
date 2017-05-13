@@ -11,9 +11,9 @@ public class OrdnetLenkeliste<T extends Comparable<T>> extends Lenkeliste<T>{
 
     	// Hvis listen er tom
     	if (forste == null){
-    		forste = nyNode;
-    		siste = nyNode;
-    		return;
+    	    forste = nyNode;
+            siste = nyNode;
+    	    return;
     	}
 
 	// Lager et element
@@ -22,13 +22,13 @@ public class OrdnetLenkeliste<T extends Comparable<T>> extends Lenkeliste<T>{
 	// Itererer gjennom nodene helt til elementet vi skal sette inn er mindre eller likt elementet
 	// vi itererer til. Naar det skjer har vi funnet plassen den nye noden skal settes inn.
     	while (element.compareTo(nesteElement) >= 0 && nesteElement != null && node.neste != null){
-	    	node = node.neste;
-	    	nesteElement = (T) node.element;
+	    node = node.neste;
+	    nesteElement = (T) node.element;
     	}
 
 	if (element.compareTo(nesteElement) >= 0){
-		nyNode.forrige = node;
-		node.neste = nyNode;
+	    nyNode.forrige = node;
+	    node.neste = nyNode;
 	}else{
 	    // Setter pekerne til nyNode til aa peke paa objektene den skal mellom.
 	    nyNode.neste = node;
@@ -39,10 +39,10 @@ public class OrdnetLenkeliste<T extends Comparable<T>> extends Lenkeliste<T>{
 	    	node.forrige.neste = nyNode;
 	    }else{
 	   	forste = nyNode;
-	   }
+	    }
 
-	   //Setter itereringsnodens forrige-peker til aa peke paa nyNode.
-	   node.forrige = nyNode;
+	    //Setter itereringsnodens forrige-peker til aa peke paa nyNode.
+	    node.forrige = nyNode;
 	}
     }
 }
