@@ -69,5 +69,5 @@ public class Utvei implements Comparable<Utvei>{
             losning[y][x] = true;
         }
         return losning;
-}
+    }
 }
