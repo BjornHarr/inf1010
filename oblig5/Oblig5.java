@@ -25,50 +25,43 @@ class Oblig5 {
 
 
         // les start-koordinater fra standard input
+        Boolean kunForste = true;
         Scanner inn = new Scanner(System.in);
-        boolean kunForste = false;
-        boolean minUt = true;
-
-
-        System.out.println(String.format("minimalUtskrift('u') = %b | SkrivKunForste('f') = %b | 'p' for aa printe labyrint", minUt, kunForste));
+        System.out.println("\n u : minimalUtskrift | p : skriv ut labyrint | f : skriv ut kun forste");
         while (inn.hasNextLine()) {
             String[] ord = inn.nextLine().split(" ");
 
-            switch (ord[0]){
-                case "u":
-                    minUt = l.settMinimalUtskrift();
-                    break;
 
-                case "p":
-                    System.out.println(l);
-                    break;
+            if (ord[0].equals("u")){
+                l.settMinimalUtskrift();
+                System.out.println("Endret minimal utskrift");
 
-                case "f":
-                    kunForste = !kunForste;
-                    break;
+            }else if (ord[0].equals("p")){
+                System.out.println(l);
 
-                default:
-                    int startKol = Integer.parseInt(ord[0]);
-                    int startRad = Integer.parseInt(ord[1]);
-                    Liste<Utvei> utveier = l.finnUtveiFra(startKol, startRad);
-                    if (!utveier.erTom()) {
-                        if (kunForste){
-                            System.out.println(utveier.fjern());
-                        } else {
-                            int str = 0;
-                            for (Utvei u : utveier) {
-                                System.out.println(u);
-                                str++;
-                            }
-                            System.out.println("\nAntall utveier: " + str);
+            }else if (ord[0].equals("f")){
+                kunForste = !kunForste;
+                System.out.printf("kunForste er %b\n", kunForste);
+
+            }else{
+                int startKol = Integer.parseInt(ord[0]);
+                int startRad = Integer.parseInt(ord[1]);
+                Liste<Utvei> utveier = l.finnUtveiFra(startKol, startRad);
+                if (!utveier.erTom()) {
+                    if (kunForste){
+                        System.out.println(utveier.fjern());
+                    }else{
+                        for (Utvei u : utveier) {
+                            System.out.println(u);
+
                         }
-                    } else {
-                        System.out.println("Ingen utveier.");
                     }
-                    System.out.println();
-                    break;
+                } else {
+                    System.out.println("Ingen utveier.");
+                }
+                System.out.println("\n u : minimalUtskrift | p : skriv ut labyrint | f : skriv ut kun forste");
+
             }
-            System.out.println(String.format("minimalUtskrift('u') = %b | SkrivKunForste('f') = %b", minUt, kunForste));
         }
     }
 }

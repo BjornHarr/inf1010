@@ -4,8 +4,6 @@ public abstract class Rute {
     private static OrdnetLenkeliste<Utvei> utveier;
     private static boolean minimalUtskrift;
 
-    protected boolean paaVeien;
-
     // Rutens posisjon i labyrinten
     private int kol;
     private int rad;
@@ -19,6 +17,8 @@ public abstract class Rute {
     private int skrivKol;
     private int skrivRad;
 
+    protected boolean paaVeien = false;
+
     Rute(Labyrint labyrintReferanse, int kol, int rad){
         this.labyrintReferanse = labyrintReferanse;
         this.kol = kol;
@@ -31,11 +31,11 @@ public abstract class Rute {
 
     //Setter naboer for denne ruten
     public void settNaboer(int kolonner, int rader){
-        if (rad > 0)        nord = labyrintReferanse.hentRute(kol    , rad - 1); //Setter nabo Nord
-        if (rad < rader)    syd  = labyrintReferanse.hentRute(kol    , rad + 1); //Setter nabo Syd
+        if (rad > 0)        nord = labyrintReferanse.hentRute(kol, rad - 1); //Setter nabo Nord
+        if (rad < rader)    syd  = labyrintReferanse.hentRute(kol, rad + 1); //Setter nabo Syd
 
-        if (kol < kolonner) oest = labyrintReferanse.hentRute(kol + 1, rad    ); //Setter nabo Oest
-        if (kol > 0)        vest = labyrintReferanse.hentRute(kol - 1, rad    ); //Setter nabo Vest
+        if (kol < kolonner) oest = labyrintReferanse.hentRute(kol + 1, rad); //Setter nabo Oest
+        if (kol > 0)        vest = labyrintReferanse.hentRute(kol - 1, rad); //Setter nabo Vest
     }
 
     public OrdnetLenkeliste<Utvei> finnUtvei(boolean minimalUtskrift){
@@ -48,9 +48,7 @@ public abstract class Rute {
         }
 
         if (this instanceof Aapning){
-            paaVeien = true;
-            this.lagreUtvei("", 0);
-            paaVeien = false;
+            utveier.settInn(new Utvei(rad, kol, 0, "", minimalUtskrift, labyrintReferanse.toString()));
             return utveier;
         }
 
@@ -59,14 +57,13 @@ public abstract class Rute {
     }
 
     public void gaa(Rute fra, String vei, int lengde){
-        lengde++;
-
         if (!paaVeien){
+            paaVeien = true;
 
-            paaVeien = !paaVeien;
+            lengde++;
 
             if (!minimalUtskrift){
-                vei += String.format("%s --> ", this.hentKoordinat());
+                vei = String.format("%s --> (%d,%d)", vei, skrivKol, skrivRad);
             }
 
             if (this instanceof Aapning){
@@ -79,39 +76,11 @@ public abstract class Rute {
             if (syd  != fra && syd  instanceof HvitRute)  syd.gaa(this, vei, lengde);
             if (vest != fra && vest instanceof HvitRute) vest.gaa(this, vei, lengde);
 
-            paaVeien = !paaVeien;
+            paaVeien = false;
         }
     }
 
     private void lagreUtvei(String vei, int lengde){
-        utveier.settInn(new Utvei(this, lengde, vei + "Aapning funnet", labyrintReferanse.toString(), minimalUtskrift));
-    }
-
-    public String hentKoordinat(){
-        return String.format("(%d,%d)", skrivKol, skrivRad);
-    }
-
-    public int hentSkrivRad(){
-        return skrivRad;
-    }
-
-    public int hentSkrivKol(){
-        return skrivKol;
-    }
-
-    public int hentRad(){
-        return rad;
-    }
-
-    public int hentKol(){
-        return kol;
-    }
-
-    public int hentRader(){
-        return labyrintReferanse.hentRader();
-    }
-
-    public int hentKolonner(){
-        return labyrintReferanse.hentKolonner();
+        utveier.settInn(new Utvei(skrivKol, skrivRad, lengde, vei, minimalUtskrift, labyrintReferanse.toString()));
     }
 }

@@ -1,0 +1,15 @@
+#velgFilnavn-vbox {
+    -fx-padding: 50px;
+}
+
+#velgStartPunkt-layout {
+}
+
+#velgStartPunkt-koordinatVelger{
+    -fx-spacing: 5px;
+    -fx-padding: 50px;
+}
+
+#velgStartPunkt-textField{
+    -fx-width: 50px;
+}
