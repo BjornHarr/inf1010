@@ -28,8 +28,7 @@ public class Oblig7 extends Application{
 
         settNyScene(velgFilnavn);
 
-
-        velgStartpunkt("labyrint1.in"); //TODO fjern denne!!
+        velgStartpunkt("labyrint4.in");
     }
 
     private void velgFilnavn(){
@@ -64,29 +63,37 @@ public class Oblig7 extends Application{
             File fil = new File(filnavn);
             Labyrint l = Labyrint.lesFraFil(fil);
 
-                //Labyrinten i boolsk-streng-format
-                GridPane labyrinten = new GridPane();
-                Scene velgStartpunkt = new Scene(labyrinten, 380, 340);
+                VBox vBox = new VBox();
+                Scene velgStartpunkt = new Scene(vBox);
 
                 //kobler scenen til CSS-stylesheet, for aa kunne endre paa scenen.
                 velgStartpunkt.getStylesheets().add("CSS/stylesheet.css");
-                labyrinten.setId("velgStartPunkt-labyrinten");
+                vBox.setId("velgStartPunkt-vBox");
 
-                boolean[][] boolLabyrint = l.hentBoolLabyrint();
+                    Text overskrift = new Text("Velg rute");
+                    overskrift.setId("velgStartPunkt-overskrift");
 
-                for (int i = 0; i < boolLabyrint.length; i++){
-                    for (int j = 0; j < boolLabyrint[i].length; j++){
-                        if (boolLabyrint[i][j]) {
-                            Button rute = new Button("  ");
-                                rute.setId("velgStartPunkt-labyrinten-hvitRute");
+                    GridPane labyrinten = new GridPane();
+                    labyrinten.setId("velgStartPunkt-labyrinten");
+                    //Labyrinten i boolsk-format
+                    boolean[][] boolLabyrint = l.hentBoolLabyrint();
+                    //Setter opp GridPane med knapper der det er hvit rute
+                    for (int i = 0; i < boolLabyrint.length; i++){
+                        for (int j = 0; j < boolLabyrint[i].length; j++){
+                            if (boolLabyrint[i][j]) {
                                 int rad = i + 1;
                                 int kol = j + 1;
-                                rute.setOnAction(action -> {  losLabyrint(fil, kol, rad);  });
-                            labyrinten.add(rute, j, i);
+                                Button rute = new Button(" ");
+                                    rute.setMaxWidth(Double.MAX_VALUE);
+                                    rute.setId("velgStartPunkt-labyrinten-hvitRute");
+                                    rute.setOnAction(action -> {  losLabyrint(fil, kol, rad);  });
+                                labyrinten.add(rute, j, i);
+                            }
                         }
                     }
-                }
+                vBox.getChildren().addAll(overskrift, labyrinten);
 
+            hovedVindu.sizeToScene();
             settNyScene(velgStartpunkt);
 
         }catch(FileNotFoundException fnfe){
@@ -96,39 +103,9 @@ public class Oblig7 extends Application{
 
     private void losLabyrint(File fil, int kol, int rad){
         Button test = new Button(kol + ", " + rad);
-            test.setOnAction(action -> {  velgStartpunkt("labyrint1.in");  } ); //TODO fjern denne knappen
+            test.setOnAction(action -> {  velgStartpunkt("labyrint4.in");  } ); //TODO fjern denne knappen
         Scene testScene = new Scene(test, 300, 200);
         settNyScene(testScene);
-
-
-/*        BorderPane bp = new BorderPane();
-        losLabyrint = new Scene(bp, 1000, 600);
-
-        HBox meny = new HBox();
-        meny.setAlignment(Pos.CENTER);
-
-        Text koordinatInfo = new Text();
-            koordinatInfo.setTextAlignment(TextAlignment.LEFT);
-            koordinatInfo.setText("Skriv koordinatet du vil begynne i");
-        meny.getChildren().add(koordinatInfo);
-
-        TextField tekstFelt = new TextField();
-        meny.getChildren().add(tekstFelt);
-
-        TextField tekstFelt = new TextField();
-        meny.getChildren().add(tekstFelt);
-
-        Button bekreftelsesKnapp = new Button("Los Labyrint");
-            bekreftelsesKnapp.setOnAction(action -> {  byggSceneLosLabyrint(tekstFelt.getText());  });
-        meny.getChildren().add(bekreftelsesKnapp);
-
-        ToggleButton skrivUtForste = new ToggleButton("Skriv kun forste");
-
-
-
-        bp.setLeft(meny);
-        settNyScene(losLabyrint);
-*/
     }
 
     private void settNyScene(Scene nyScene){
