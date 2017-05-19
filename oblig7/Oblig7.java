@@ -27,11 +27,13 @@ public class Oblig7 extends Application{
         velgFilnavn();
 
         settNyScene(velgFilnavn);
+
+
+        velgStartpunkt("labyrint1.in"); //TODO fjern denne!!
     }
 
     private void velgFilnavn(){
         VBox vbox = new VBox();
-            vbox.setSpacing(20);
             vbox.setAlignment(Pos.CENTER);
 
         velgFilnavn = new Scene(vbox, 300, 200);
@@ -45,72 +47,60 @@ public class Oblig7 extends Application{
         vbox.getChildren().add(informasjon);
 
         TextField tekstFelt = new TextField();
-//            tekstFelt.setOnAction(action -> {  velgStartpunkt(tekstFelt.getText());  });
-            tekstFelt.setOnAction(action -> {  velgStartpunkt("labyrint1.in");  });
+            tekstFelt.setOnAction(action -> {  velgStartpunkt(tekstFelt.getText());  });
         vbox.getChildren().add(tekstFelt);
 
         Button velgStartKnapp = new Button("Velg Startpunkt");
             velgStartKnapp.setOnAction(action -> {  velgStartpunkt(tekstFelt.getText());  });
         vbox.getChildren().add(velgStartKnapp);
-
-/*TODO        Button finnAlleKnapp = new Button("Finn alle losninger");
-            finnAlleKnapp.setOnAction(action -> {  finnAlleLosninger(tekstFelt.getText());  });
-        vbox.getChildren().add(finnAlleKnapp);
-*/
     }
 
     /**
     *
-    *
-    *
-     @param filnavn Filnavnet som skrives inn dersom
+    *   @param filnavn Filnavnet som skrives inn dersom
     */
     private void velgStartpunkt(String filnavn){
         try{
             File fil = new File(filnavn);
             Labyrint l = Labyrint.lesFraFil(fil);
 
-            BorderPane layout = new BorderPane();
-            Scene velgStartpunkt = new Scene(layout, 1000, 800);
+                //Labyrinten i boolsk-streng-format
+                GridPane labyrinten = new GridPane();
+                Scene velgStartpunkt = new Scene(labyrinten, 380, 340);
 
-            //kobler scenen til CSS-stylesheet, for aa kunne endre paa scenen.
-            velgFilnavn.getStylesheets().add("CSS/stylesheet.css");
-            layout.setId("velgStartPunkt-layout");
+                //kobler scenen til CSS-stylesheet, for aa kunne endre paa scenen.
+                velgStartpunkt.getStylesheets().add("CSS/stylesheet.css");
+                labyrinten.setId("velgStartPunkt-labyrinten");
 
-            Text labyrinten = new Text(l.toString());
+                boolean[][] boolLabyrint = l.hentBoolLabyrint();
 
-            HBox koordinatVelger = new HBox();
-                koordinatVelger.setAlignment(Pos.CENTER);
-                koordinatVelger.setId("velgStartPunkt-koordinatVelger");
-
-                TextField radKoordinat = new TextField();
-                    radKoordinat.setId("velgStartPunkt-textField");
-                    radKoordinat.setText("Rad...");
-                koordinatVelger.getChildren().add(radKoordinat);
-
-                TextField kolKoordinat = new TextField();
-                    kolKoordinat.setId("velgStartPunkt-textField");
-                    kolKoordinat.setText("Kol...");
-                koordinatVelger.getChildren().add(kolKoordinat);
-
-                Button bekreftelsesKnapp = new Button("Los Labyrint");
-                    bekreftelsesKnapp.setAlignment(Pos.CENTER);
-                    bekreftelsesKnapp.setOnAction(action -> {
-
-                        losLabyrint(fil, Integer.parseInt(kolKoordinat.getText()), Integer.parseInt(radKoordinat.getText()));
-                    });
-                koordinatVelger.getChildren().add(bekreftelsesKnapp);
-
-            layout.setCenter(labyrinten);
-            layout.setBottom(koordinatVelger);
+                for (int i = 0; i < boolLabyrint.length; i++){
+                    for (int j = 0; j < boolLabyrint[i].length; j++){
+                        if (boolLabyrint[i][j]) {
+                            Button rute = new Button("  ");
+                                rute.setId("velgStartPunkt-labyrinten-hvitRute");
+                                int rad = i + 1;
+                                int kol = j + 1;
+                                rute.setOnAction(action -> {  losLabyrint(fil, kol, rad);  });
+                            labyrinten.add(rute, j, i);
+                        }
+                    }
+                }
 
             settNyScene(velgStartpunkt);
+
         }catch(FileNotFoundException fnfe){
             velgFilnavn();
         }
     }
 
     private void losLabyrint(File fil, int kol, int rad){
+        Button test = new Button(kol + ", " + rad);
+            test.setOnAction(action -> {  velgStartpunkt("labyrint1.in");  } ); //TODO fjern denne knappen
+        Scene testScene = new Scene(test, 300, 200);
+        settNyScene(testScene);
+
+
 /*        BorderPane bp = new BorderPane();
         losLabyrint = new Scene(bp, 1000, 600);
 

@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 public class Labyrint{
 
     private Rute[][] labyrint;
+    private boolean[][] boolLabyrint;
 
     private int rader;
     private int kolonner;
@@ -15,6 +16,12 @@ public class Labyrint{
         this.rader = rader-1;
         this.kolonner = kolonner-1;
         this.labyrint = new Rute[rader][kolonner];
+        this.boolLabyrint = new boolean[rader][kolonner];
+            for (int i = 0; i < rader; i++){
+                for(int j = 0; j < kolonner; j++){
+                    boolLabyrint[i][j] = false;
+                }
+            }
     }
 
     public void settMinimalUtskrift(){
@@ -23,6 +30,10 @@ public class Labyrint{
 
     public boolean hentMinimalUtskrift(){
         return minimalUtskrift;
+    }
+
+    public boolean[][] hentBoolLabyrint(){
+        return boolLabyrint;
     }
 
     @Override
@@ -72,11 +83,13 @@ public class Labyrint{
                 // Sjekker om ruten er en Aapning
                 if (this.erAapning(konverterer[kol], kol, rad)){
                     this.oppdaterLabyrint(new Aapning(this, kol, rad), kol, rad);
+                    boolLabyrint[rad][kol] = true;
                 } else {
                     //Sjekker hva slags rute det er
                     switch (konverterer[kol]){
                         case ".":
                             this.oppdaterLabyrint(new HvitRute(this, kol, rad), kol, rad);
+                            boolLabyrint[rad][kol] = true;
                             break;
 
                         case "#":

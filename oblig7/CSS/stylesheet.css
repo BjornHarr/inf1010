@@ -1,15 +1,22 @@
+/**********************************************************************************************************************/
+/**** velgFilnavn                                                                                                 ****/
+/********************************************************************************************************************/
 #velgFilnavn-vbox {
-    -fx-padding: 50px;
+    -fx-padding: 40px;
+    -fx-spacing: 20px;
 }
 
-#velgStartPunkt-layout {
+/**********************************************************************************************************************/
+/**** velgStartPunkt                                                                                              ****/
+/********************************************************************************************************************/
+#velgStartPunkt-labyrinten{ /*  Labyrinten som vises  */
+    -fx-padding: 20px;
+    -fx-padding-color: RED;
 }
 
-#velgStartPunkt-koordinatVelger{
-    -fx-spacing: 5px;
-    -fx-padding: 50px;
+#velgStartPunkt-labyrinten-hvitRute{ /*  Hvit rute i labyrinten  */
+
 }
 
-#velgStartPunkt-textField{
-    -fx-width: 50px;
+#velgStartPunkt-labyrinten-sortRute{ /*  Sort rute i labyrinten  */
 }
