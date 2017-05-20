@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 public class Labyrint{
 
     private Rute[][] labyrint;
+    private boolean[][] boolLabyrint;
 
     private int rader;
     private int kolonner;
@@ -12,18 +13,27 @@ public class Labyrint{
     private boolean minimalUtskrift = false;
 
     private Labyrint(int kolonner, int rader){
-        this.rader = rader;
-        this.kolonner = kolonner;
+        this.rader = rader-1;
+        this.kolonner = kolonner-1;
         this.labyrint = new Rute[rader][kolonner];
+        this.boolLabyrint = new boolean[rader][kolonner];
+            for (int i = 0; i < rader; i++){
+                for(int j = 0; j < kolonner; j++){
+                    boolLabyrint[i][j] = false;
+                }
+            }
     }
 
-    public boolean settMinimalUtskrift(){
+    public void settMinimalUtskrift(){
         this.minimalUtskrift = !this.minimalUtskrift;
-        return minimalUtskrift;
     }
 
     public boolean hentMinimalUtskrift(){
         return minimalUtskrift;
+    }
+
+    public boolean[][] hentBoolLabyrint(){ //TODO sjekk at denne funker
+        return boolLabyrint;
     }
 
     @Override
@@ -70,18 +80,22 @@ public class Labyrint{
             String[] konverterer = sc.nextLine().split("");
 
             for (int kol = 0; kol < antKolonner; kol++){
-                switch (konverterer[kol]){
-                    case ".":
-                        if (this.erAapning(konverterer[kol], kol, rad)){
-                            this.oppdaterLabyrint(new Aapning (this, kol, rad), kol, rad);
-                        } else {
+                // Sjekker om ruten er en Aapning
+                if (this.erAapning(konverterer[kol], kol, rad)){
+                    this.oppdaterLabyrint(new Aapning(this, kol, rad), kol, rad);
+                    boolLabyrint[rad][kol] = true;
+                } else {
+                    //Sjekker hva slags rute det er
+                    switch (konverterer[kol]){
+                        case ".":
                             this.oppdaterLabyrint(new HvitRute(this, kol, rad), kol, rad);
-                        }
-                        break;
+                            boolLabyrint[rad][kol] = true;
+                            break;
 
-                    case "#":
-                        this.oppdaterLabyrint(new SortRute(this, kol, rad), kol, rad);
-                        break;
+                        case "#":
+                            this.oppdaterLabyrint(new SortRute(this, kol, rad), kol, rad);
+                            break;
+                    }
                 }
             }
         }

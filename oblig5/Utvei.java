@@ -1,21 +1,20 @@
 public class Utvei implements Comparable<Utvei>{
-    private Rute rute;
     private int antFlytt;
     private String vei;
-    private String labyrint;
+    private String lostLabyrint;
+    private int rad;
+    private int kol;
     private String koordinat;
+    private boolean minimalUtskrift;
 
-    private String skriv;
-
-    Utvei(Rute rute, int antFlytt, String vei, String labyrint, boolean minimalUtskrift){
+    Utvei(int kol, int rad, int antFlytt, String vei, boolean minimalUtskrift, String lostLabyrint){
+        this.kol = kol;
+        this.rad = rad;
         this.vei = vei;
-        this.rute = rute;
         this.antFlytt = antFlytt;
-        this.labyrint = labyrint;
-        this.koordinat = rute.hentKoordinat();
-
-        this.skriv = String.format("Utvei funnet i %s, antFlytt: %d", koordinat, antFlytt);
-        if (!minimalUtskrift) skriv += String.format("\n%s\n%s\n", labyrint, vei);
+        this.lostLabyrint = lostLabyrint;
+        this.koordinat = String.format("(%d,%d)", kol, rad);
+        this.minimalUtskrift = minimalUtskrift;
     }
 
     @Override
@@ -25,11 +24,26 @@ public class Utvei implements Comparable<Utvei>{
 
     @Override
     public String toString(){
-        return skriv;
+        if (!minimalUtskrift){
+            return String.format("%s \n Utvei funnet i %s, antFlytt: %d\n%s\n", lostLabyrint, koordinat, antFlytt, vei);
+        }
+        return String.format("Utvei funnet i %s", koordinat);
+    }
+
+    public String hentLostLabyrint(){
+        return lostLabyrint;
     }
 
     public int hentAntFlytt(){
         return antFlytt;
+    }
+
+    public int hentRad(){
+        return rad;
+    }
+
+    public int hentKol(){
+        return kol;
     }
 
     public String hentKoordinat(){

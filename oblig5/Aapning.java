@@ -3,7 +3,8 @@ public class Aapning extends HvitRute {
         super(labyrintReferanse, kol, rad);
     }
 
+    @Override
     public char tilTegn(){
-        return (paaVeien ? 'X' : ' ');    
+        return (paaVeien ? 'X' : ' ');
     }
 }
