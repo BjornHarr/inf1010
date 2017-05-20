@@ -32,7 +32,7 @@ public class Labyrint{
         return minimalUtskrift;
     }
 
-    public boolean[][] hentBoolLabyrint(){
+    public boolean[][] hentBoolLabyrint(){ //TODO sjekk at denne funker
         return boolLabyrint;
     }
 
@@ -123,5 +123,13 @@ public class Labyrint{
     // Brukes for aa lettere kunne sette naboene
     public Rute hentRute(int kol, int rad){
         return labyrint[rad][kol];
+    }
+
+    public int hentRader(){
+        return rader;
+    }
+
+    public int hentKolonner(){
+        return kolonner;
     }
 }

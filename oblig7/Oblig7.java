@@ -54,10 +54,6 @@ public class Oblig7 extends Application{
         vbox.getChildren().add(velgStartKnapp);
     }
 
-    /**
-    *
-    *   @param filnavn Filnavnet som skrives inn dersom
-    */
     private void velgStartpunkt(String filnavn){
         try{
             File fil = new File(filnavn);
@@ -68,7 +64,7 @@ public class Oblig7 extends Application{
 
                 //kobler scenen til CSS-stylesheet, for aa kunne endre paa scenen.
                 velgStartpunkt.getStylesheets().add("CSS/stylesheet.css");
-                vBox.setId("velgStartPunkt-vBox");
+                vBox.setId("velgStartPunkt-hovedBox");
 
                     Text overskrift = new Text("Velg rute");
                     overskrift.setId("velgStartPunkt-overskrift");
@@ -85,7 +81,7 @@ public class Oblig7 extends Application{
                                 int kol = j + 1;
                                 Button rute = new Button(" ");
                                     rute.setMaxWidth(Double.MAX_VALUE);
-                                    rute.setOnAction(action -> {  losLabyrint(fil, kol, rad);  });
+                                    rute.setOnAction(action -> {  losLabyrint(l, kol, rad);  });
                                     labyrinten.add(rute, j, i);
                             }else{
                                 Rectangle rute = new Rectangle(0, 0, 28, 28);
@@ -103,11 +99,82 @@ public class Oblig7 extends Application{
         }
     }
 
-    private void losLabyrint(File fil, int kol, int rad){
-        Button test = new Button(kol + ", " + rad);
-            test.setOnAction(action -> {  velgStartpunkt("labyrint4.in");  } ); //TODO fjern denne knappen
-        Scene testScene = new Scene(test, 300, 200);
-        settNyScene(testScene);
+    private void losLabyrint(Labyrint l, int inKol, int inRad){
+        VBox vBox = new VBox();
+        Scene lostLabyrint = new Scene(vBox);
+
+        //kobler scenen til CSS-stylesheet, for aa kunne endre paa scenen.
+        lostLabyrint.getStylesheets().add("CSS/stylesheet.css");
+        vBox.setId("losLabyrint-hovedBox");
+
+            Text overskrift = new Text();
+                String overskriftTekst = String.format("Raskeste losning fra (%2d, %2d)", inKol, inRad);
+                overskrift.setText(overskriftTekst);
+            overskrift.setId("losLabyrint-overskrift");
+
+            //Loser labyrinten og henter utveiene
+            OrdnetLenkeliste<Utvei> utveier = (OrdnetLenkeliste<Utvei>) l.finnUtveiFra(inKol, inRad);
+
+            GridPane[] losninger = new GridPane[utveier.storrelse()];
+
+            int run = 0;
+            for (Utvei u : utveier){
+                GridPane labyrint = new GridPane();
+                labyrint.setId("losLabyrint-labyrinten");
+
+                //Labyrinten i boolsk-format
+                boolean[][] boolLabyrint = l.hentBoolLabyrint();
+                boolean[][] lostBoolLabyrint = losningStringTilTabell(u.hentVei(), l.hentKolonner() + 1, l.hentRader() + 1);
+
+                //Setter opp GridPane med ruter der sort rute er sort, hvit rute er hvit, og paaVeien er gul
+                for (int i = 0; i < boolLabyrint.length; i++){
+                    for (int j = 0; j < boolLabyrint[i].length; j++){
+                        if (boolLabyrint[i][j]) {
+                            int rad = i + 1;
+                            int kol = j + 1;
+
+                            Button rute = new Button(" ");
+                                rute.setMaxWidth(Double.MAX_VALUE);
+                                rute.setOnAction(action -> {  losLabyrint(l, kol, rad);  });
+                                labyrint.add(rute, j, i);
+
+                            if (lostBoolLabyrint[i][j]){
+                                rute.setId("losLabyrint-hvitRute-paaveien");
+                            }
+
+                        }else{
+                            Rectangle rute = new Rectangle(0, 0, 28, 28);
+                                labyrint.add(rute, j, i);
+                        }
+                    }
+                }
+                losninger[run] = labyrint;
+                run++;
+            }
+
+        vBox.getChildren().addAll(overskrift, losninger[0]);
+
+        settNyScene(lostLabyrint);
+    }
+    /**
+     * Konverterer losning-String fra oblig 5 til en boolean[][]-representasjon
+     * av losningstien.
+     * @param losningString String-representasjon av utveien
+     * @param bredde        bredde til labyrinten
+     * @param hoyde         hoyde til labyrinten
+     * @return              2D-representasjon av rutene der true indikerer at
+     *                      ruten er en del av utveien.
+     */
+    private boolean[][] losningStringTilTabell(String losningString, int bredde, int hoyde) {
+        boolean[][] losning = new boolean[hoyde][bredde];
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile("\\(([0-9]+),([0-9]+)\\)");
+        java.util.regex.Matcher m = p.matcher(losningString.replaceAll("\\s",""));
+        while(m.find()) {
+            int x = Integer.parseInt(m.group(1))-1;
+            int y = Integer.parseInt(m.group(2))-1;
+            losning[y][x] = true;
+        }
+        return losning;
     }
 
     private void settNyScene(Scene nyScene){
