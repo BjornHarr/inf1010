@@ -85,9 +85,11 @@ public class Oblig7 extends Application{
                                 int kol = j + 1;
                                 Button rute = new Button(" ");
                                     rute.setMaxWidth(Double.MAX_VALUE);
-                                    rute.setId("velgStartPunkt-labyrinten-hvitRute");
                                     rute.setOnAction(action -> {  losLabyrint(fil, kol, rad);  });
-                                labyrinten.add(rute, j, i);
+                                    labyrinten.add(rute, j, i);
+                            }else{
+                                Rectangle rute = new Rectangle(0, 0, 28, 28);
+                                    labyrinten.add(rute, j, i);
                             }
                         }
                     }
