@@ -1,0 +1,45 @@
+/**********************************************************************************************************************/
+/**** velgFilnavn                                                                                                 ****/
+/********************************************************************************************************************/
+#velgFilnavn-vbox {
+    -fx-padding: 30px;
+    -fx-spacing: 20px;
+}
+
+/**********************************************************************************************************************/
+/**** velgStartPunkt                                                                                              ****/
+/********************************************************************************************************************/
+#velgStartPunkt-hovedBox{
+    -fx-padding: 30px;
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+}
+
+#velgStartPunkt-overskrift{
+    -fx-font-size: 20;
+}
+
+#velgStartPunkt-labyrinten{ /*  Labyrinten som vises  */
+    -fx-background-color: BLACK;
+}
+
+/**********************************************************************************************************************/
+/**** losLabyrint                                                                                                 ****/
+/********************************************************************************************************************/
+#losLabyrint-hovedBox{
+    -fx-padding: 30px;
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+}
+
+#losLabyrint-overskrift{
+    -fx-font-size: 20;
+}
+
+#losLabyrint-labyrinten{ /*  Labyrinten som vises  */
+    -fx-background-color: BLACK;
+}
+
+#losLabyrint-hvitRute-paaveien{
+    -fx-color: GREEN;
+}

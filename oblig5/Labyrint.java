@@ -12,14 +12,13 @@ public class Labyrint{
     private boolean minimalUtskrift = false;
 
     private Labyrint(int kolonner, int rader){
-        this.rader = rader;
-        this.kolonner = kolonner;
+        this.rader = rader-1;
+        this.kolonner = kolonner-1;
         this.labyrint = new Rute[rader][kolonner];
     }
 
-    public boolean settMinimalUtskrift(){
+    public void settMinimalUtskrift(){
         this.minimalUtskrift = !this.minimalUtskrift;
-        return minimalUtskrift;
     }
 
     public boolean hentMinimalUtskrift(){
@@ -70,18 +69,20 @@ public class Labyrint{
             String[] konverterer = sc.nextLine().split("");
 
             for (int kol = 0; kol < antKolonner; kol++){
-                switch (konverterer[kol]){
-                    case ".":
-                        if (this.erAapning(konverterer[kol], kol, rad)){
-                            this.oppdaterLabyrint(new Aapning (this, kol, rad), kol, rad);
-                        } else {
+                // Sjekker om ruten er en Aapning
+                if (this.erAapning(konverterer[kol], kol, rad)){
+                    this.oppdaterLabyrint(new Aapning(this, kol, rad), kol, rad);
+                } else {
+                    //Sjekker hva slags rute det er
+                    switch (konverterer[kol]){
+                        case ".":
                             this.oppdaterLabyrint(new HvitRute(this, kol, rad), kol, rad);
-                        }
-                        break;
+                            break;
 
-                    case "#":
-                        this.oppdaterLabyrint(new SortRute(this, kol, rad), kol, rad);
-                        break;
+                        case "#":
+                            this.oppdaterLabyrint(new SortRute(this, kol, rad), kol, rad);
+                            break;
+                    }
                 }
             }
         }
@@ -109,13 +110,5 @@ public class Labyrint{
     // Brukes for aa lettere kunne sette naboene
     public Rute hentRute(int kol, int rad){
         return labyrint[rad][kol];
-    }
-
-    public int hentRader(){
-        return rader;
-    }
-
-    public int hentKolonner(){
-        return kolonner;
     }
 }
