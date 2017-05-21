@@ -29,8 +29,6 @@ public class Oblig7 extends Application{
         velgFilnavn();
 
         settNyScene(velgFilnavn);
-
-        velgStartpunkt("labyrint4.in");
     }
 
     private void velgFilnavn(){
