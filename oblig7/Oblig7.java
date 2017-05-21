@@ -19,6 +19,8 @@ public class Oblig7 extends Application{
     private int startRad;
     private int startKol;
 
+    private String filnavn;
+
     @Override
     public void start(Stage vindu) throws Exception {
         this.hovedVindu = vindu;
@@ -56,11 +58,12 @@ public class Oblig7 extends Application{
 
     private void velgStartpunkt(String filnavn){
         try{
+            this.filnavn = filnavn;
             File fil = new File(filnavn);
             Labyrint l = Labyrint.lesFraFil(fil);
 
-                VBox vBox = new VBox();
-                Scene velgStartpunkt = new Scene(vBox);
+            VBox vBox = new VBox();
+            Scene velgStartpunkt = new Scene(vBox);
 
                 //kobler scenen til CSS-stylesheet, for aa kunne endre paa scenen.
                 velgStartpunkt.getStylesheets().add("CSS/stylesheet.css");
@@ -69,26 +72,8 @@ public class Oblig7 extends Application{
                     Text overskrift = new Text("Velg rute");
                     overskrift.setId("velgStartPunkt-overskrift");
 
-                    GridPane labyrinten = new GridPane();
-                    labyrinten.setId("velgStartPunkt-labyrinten");
-                    //Labyrinten i boolsk-format
-                    boolean[][] boolLabyrint = l.hentBoolLabyrint();
-                    //Setter opp GridPane med knapper der det er hvit rute
-                    for (int i = 0; i < boolLabyrint.length; i++){
-                        for (int j = 0; j < boolLabyrint[i].length; j++){
-                            if (boolLabyrint[i][j]) {
-                                int rad = i + 1;
-                                int kol = j + 1;
-                                Button rute = new Button(" ");
-                                    rute.setMaxWidth(Double.MAX_VALUE);
-                                    rute.setOnAction(action -> {  losLabyrint(l, kol, rad);  });
-                                    labyrinten.add(rute, j, i);
-                            }else{
-                                Rectangle rute = new Rectangle(0, 0, 28, 28);
-                                    labyrinten.add(rute, j, i);
-                            }
-                        }
-                    }
+                    GridPane labyrinten = skrivUlostLabyrint(l);
+
                 vBox.getChildren().addAll(overskrift, labyrinten);
 
             hovedVindu.sizeToScene();
@@ -115,47 +100,81 @@ public class Oblig7 extends Application{
             //Loser labyrinten og henter utveiene
             OrdnetLenkeliste<Utvei> utveier = (OrdnetLenkeliste<Utvei>) l.finnUtveiFra(inKol, inRad);
 
-            GridPane[] losninger = new GridPane[utveier.storrelse()];
+            if (utveier.storrelse() > 0){
+                GridPane[] losninger = new GridPane[utveier.storrelse()];
 
-            int run = 0;
-            for (Utvei u : utveier){
-                GridPane labyrint = new GridPane();
-                labyrint.setId("losLabyrint-labyrinten");
+                int run = 0;
+                for (Utvei u : utveier){
+                    GridPane labyrint = new GridPane();
+                    labyrint.setId("losLabyrint-labyrinten");
 
-                //Labyrinten i boolsk-format
-                boolean[][] boolLabyrint = l.hentBoolLabyrint();
-                boolean[][] lostBoolLabyrint = losningStringTilTabell(u.hentVei(), l.hentKolonner() + 1, l.hentRader() + 1);
+                    //Labyrinten i boolsk-format
+                    boolean[][] boolLabyrint = l.hentBoolLabyrint();
+                    boolean[][] lostBoolLabyrint = losningStringTilTabell(u.hentVei(), l.hentKolonner() + 1, l.hentRader() + 1);
 
-                //Setter opp GridPane med ruter der sort rute er sort, hvit rute er hvit, og paaVeien er gul
-                for (int i = 0; i < boolLabyrint.length; i++){
-                    for (int j = 0; j < boolLabyrint[i].length; j++){
-                        if (boolLabyrint[i][j]) {
-                            int rad = i + 1;
-                            int kol = j + 1;
+                    //Setter opp GridPane med ruter der sort rute er sort, hvit rute er hvit, og paaVeien er gul
+                    for (int i = 0; i < boolLabyrint.length; i++){
+                        for (int j = 0; j < boolLabyrint[i].length; j++){
+                            if (boolLabyrint[i][j]) {
+                                int rad = i + 1;
+                                int kol = j + 1;
 
-                            Button rute = new Button(" ");
-                                rute.setMaxWidth(Double.MAX_VALUE);
-                                rute.setOnAction(action -> {  losLabyrint(l, kol, rad);  });
-                                labyrint.add(rute, j, i);
+                                Button rute = new Button(" ");
+                                    rute.setMaxWidth(Double.MAX_VALUE);
+                                    rute.setOnAction(action -> {  losLabyrint(l, kol, rad);  });
+                                    labyrint.add(rute, j, i);
 
-                            if (lostBoolLabyrint[i][j]){
-                                rute.setId("losLabyrint-hvitRute-paaveien");
+                                if (lostBoolLabyrint[i][j]){
+                                    rute.setId("losLabyrint-hvitRute-paaveien");
+                                }
+
+                            }else{
+                                Rectangle rute = new Rectangle(0, 0, 28, 28);
+                                    labyrint.add(rute, j, i);
                             }
-
-                        }else{
-                            Rectangle rute = new Rectangle(0, 0, 28, 28);
-                                labyrint.add(rute, j, i);
                         }
                     }
+                    losninger[run] = labyrint;
+                    run++;
                 }
-                losninger[run] = labyrint;
-                run++;
+                vBox.getChildren().addAll(overskrift, losninger[0]);
+            }else{
+                overskriftTekst = String.format("Ingen utveier fra (%2d, %2d)", inKol, inRad);
+                overskrift.setText(overskriftTekst);
+
+                GridPane tomLabyrint = skrivUlostLabyrint(l);
+
+                vBox.getChildren().addAll(overskrift, tomLabyrint);
             }
 
-        vBox.getChildren().addAll(overskrift, losninger[0]);
-
+        hovedVindu.sizeToScene();
         settNyScene(lostLabyrint);
     }
+
+    private GridPane skrivUlostLabyrint(Labyrint l){
+        GridPane labyrinten = new GridPane();
+        labyrinten.setId("velgStartPunkt-labyrinten");
+        //Labyrinten i boolsk-format
+        boolean[][] boolLabyrint = l.hentBoolLabyrint();
+        //Setter opp GridPane med knapper der det er hvit rute
+        for (int i = 0; i < boolLabyrint.length; i++){
+            for (int j = 0; j < boolLabyrint[i].length; j++){
+                if (boolLabyrint[i][j]) {
+                    int rad = i + 1;
+                    int kol = j + 1;
+                    Button rute = new Button(" ");
+                        rute.setMaxWidth(Double.MAX_VALUE);
+                        rute.setOnAction(action -> {  losLabyrint(l, kol, rad);  });
+                        labyrinten.add(rute, j, i);
+                }else{
+                    Rectangle rute = new Rectangle(0, 0, 28, 28);
+                        labyrinten.add(rute, j, i);
+                }
+            }
+        }
+        return labyrinten;
+    }
+
     /**
      * Konverterer losning-String fra oblig 5 til en boolean[][]-representasjon
      * av losningstien.
