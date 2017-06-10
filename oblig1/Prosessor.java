@@ -8,8 +8,8 @@ public class Prosessor{
 	 * @param klok 		Klokkehastigheten til prosessoren
 	 */
 	public Prosessor(int kjerner, double klok){
-		this.klok = klok;
-		this.kjerner = kjerner;
+	    this.klok = klok;
+	    this.kjerner = kjerner;
 	}
 
 	/**
@@ -17,7 +17,7 @@ public class Prosessor{
 	 * @return klok Returnerer klokkehastigheten
 	 */
 	public double hentKlok(){
-		return klok;
+	    return klok;
 	}
 
 	/**
@@ -25,6 +25,6 @@ public class Prosessor{
 	 * @return kjerner Returnerer kjerner til prosessoren
 	 */
 	public int hentKjerner(){
-		return kjerner;
+	    return kjerner;
 	}
 }
